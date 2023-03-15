@@ -10,6 +10,6 @@
  */
 module.exports = ({ router, AuthController, AuthValidator, makeValidatorCallback, makeExpressCallback }) => {
   router.post('/register', makeExpressCallback(AuthController.register));
-  router.post('/score', makeExpressCallback(AuthController.register));
+  router.post('/score', makeExpressCallback(AuthController.score));
   return router;
 };

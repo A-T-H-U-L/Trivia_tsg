@@ -34,7 +34,7 @@ const AuthController = {
 
 score: async (httpRequest) => {
   try {
-    const updatedScore = await AuthService.doRegister(httpRequest.body);
+    const updatedScore = await AuthService.doUpdateScore(httpRequest.body);
     //response of api call of register function (status code and data)
     return {
       statusCode: 200,

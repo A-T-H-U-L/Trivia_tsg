@@ -28,7 +28,7 @@ const AuthService = {
       }
 
       var sqlObj = `INSERT INTO player VALUES (?,?,?,?,?)`;
-      // making db call for inset user in to user_account table with role table inserion    
+      // making db call for inset user in to user_account table with role table inserion
       const playerId = await db
         .promise(sqlObj, [, playerFullName, playerEmail, phoneNo, category])
         .then((result) => {
@@ -37,24 +37,45 @@ const AuthService = {
           return db.promise(queryObj);
         })
         .then(async (result) => {
-
-          
           let queryObj = `INSERT INTO score VALUES (?,?,?,?,?,?,?,?,?)`;
-          const score = await db.promise(queryObj, [, result[0].playerId, 0, 0, 0, 0, 0, 0, 0])
+          const score = await db.promise(queryObj, [, result[0].playerId, 0, 0, 0, 0, 0, 0, 0]);
           return result[0].playerId;
         })
         .catch((err) => {
-        
           console.log('catch error', err);
         });
       if (!playerId) {
-       
         throw new BadRequestError('Insert failed');
       }
-     
+
       return {
         playerId
       };
+    } catch (error) {
+      console.log('catch error', err);
+    }
+  },
+
+  doUpdateScore: async (httpRequest) => {
+    try {
+      //name ,email and password from the object is stored to variable and binded to query
+      console.log('requestBody1',httpRequest);
+      const { player_id, gkScore, financialScore, retailScore, healthCareScore, manufactureScore, automationScore } = httpRequest;
+
+
+      var sqlObj = `UPDATE score
+        SET highScore = ( '${gkScore}'+'${financialScore}'+'${retailScore}'+'${healthCareScore}'+'${manufactureScore}'+'${automationScore}'),
+        gkScore='${gkScore}',
+        financialScore='${financialScore}',
+        retailScore='${retailScore}',
+        healthCareScore='${healthCareScore}',
+        manufactureScore='${manufactureScore}',
+        automationScore='${automationScore}'
+        WHERE player_id ='${player_id}';`;
+
+        console.log("sqlObj",sqlObj)
+      const resultObj = await db.promise(sqlObj)
+      return resultObj;
     } catch (error) {
       console.log('catch error', err);
     }
